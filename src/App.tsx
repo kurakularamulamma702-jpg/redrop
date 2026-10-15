@@ -58,7 +58,7 @@ export default function App() {
   // Filters
   const [selectedBloodGroup, setSelectedBloodGroup] = useState<BloodGroup | 'ALL'>('ALL');
   const [includeCompatible, setIncludeCompatible] = useState(true);
-  const [radiusKm, setRadiusKm] = useState<number>(25); // 25 km default
+  const [radiusKm, setRadiusKm] = useState<number>(0); // 0 = all distances, nearest first
   const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'available' | 'emergency'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 

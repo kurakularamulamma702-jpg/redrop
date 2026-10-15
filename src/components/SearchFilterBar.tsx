@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BloodGroup, UserCoordinates } from '../types/blood';
 import { ALL_BLOOD_GROUPS, getCompatibleDonorGroups } from '../utils/compatibility';
 import { POPULAR_CITIES, CityPreset } from '../data/initialDonors';
-import { MapPin, Navigation, Crosshair, Filter, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { MapPin, Navigation, Filter, CheckCircle2, ShieldAlert } from 'lucide-react';
 
 interface SearchFilterBarProps {
   selectedBloodGroup: BloodGroup | 'ALL';
@@ -196,33 +196,9 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
         </div>
       </div>
 
-      {/* Radius & Availability Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
-        {/* Radius Filter */}
-        <div className="space-y-1.5">
-          <span className="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
-            <Crosshair className="w-3.5 h-3.5 text-slate-400" />
-            Search Radius Distance
-          </span>
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg">
-            {[5, 10, 25, 50, 0].map((r) => (
-              <button
-                key={r}
-                onClick={() => onSelectRadius(r)}
-                className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-                  radiusKm === r
-                    ? 'bg-white text-slate-900 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {r === 0 ? 'Any km' : `${r} km`}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Availability Filter */}
-        <div className="space-y-1.5">
+      {/* Availability Filter */}
+      <div className="pt-2 border-t border-slate-100">
+        <div className="space-y-1.5 max-w-md">
           <span className="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
             <Filter className="w-3.5 h-3.5 text-slate-400" />
             Donor Availability Status
