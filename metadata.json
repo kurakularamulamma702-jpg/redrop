@@ -1,0 +1,6 @@
+{
+  "name": "HemoLink - Direct Blood Donor & Patient Network",
+  "description": "Find nearby life-saving blood donors automatically by GPS coordinates and blood group with instant direct one-click dialer and emergency alerts.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

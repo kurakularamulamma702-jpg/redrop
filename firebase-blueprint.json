@@ -1,0 +1,71 @@
+{
+  "entities": {
+    "Donor": {
+      "title": "Donor",
+      "description": "Registered blood donor profile with GPS coordinates and verified contact",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "bloodGroup": { 
+          "type": "string", 
+          "enum": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] 
+        },
+        "phone": { "type": "string", "maxLength": 30 },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "city": { "type": "string", "maxLength": 100 },
+        "area": { "type": "string", "maxLength": 100 },
+        "isAvailable": { "type": "boolean" },
+        "isEmergencyReady": { "type": "boolean" },
+        "verified": { "type": "boolean" },
+        "isPhoneVerified": { "type": "boolean" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "bloodGroup", "phone", "latitude", "longitude"]
+    },
+    "EmergencyRequest": {
+      "title": "EmergencyRequest",
+      "description": "Urgent patient blood requirement broadcast",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "patientName": { "type": "string", "maxLength": 100 },
+        "bloodGroup": { 
+          "type": "string", 
+          "enum": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] 
+        },
+        "unitsNeeded": { "type": "number" },
+        "hospitalName": { "type": "string", "maxLength": 150 },
+        "hospitalAddress": { "type": "string", "maxLength": 200 },
+        "city": { "type": "string", "maxLength": 100 },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "contactPerson": { "type": "string", "maxLength": 100 },
+        "contactPhone": { "type": "string", "maxLength": 30 },
+        "urgency": { 
+          "type": "string", 
+          "enum": ["IMMEDIATE", "WITHIN_2_HOURS", "TODAY"] 
+        },
+        "timestamp": { "type": "number" },
+        "status": { 
+          "type": "string", 
+          "enum": ["OPEN", "FULFILLED", "IN_PROGRESS"] 
+        },
+        "notes": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["patientName", "bloodGroup", "unitsNeeded", "hospitalName", "contactPhone"]
+    }
+  },
+  "firestore": {
+    "/donors/{donorId}": {
+      "schema": { "$ref": "#/entities/Donor" },
+      "description": "Collection of voluntary blood donors"
+    },
+    "/emergencyRequests/{requestId}": {
+      "schema": { "$ref": "#/entities/EmergencyRequest" },
+      "description": "Collection of patient emergency blood SOS broadcasts"
+    }
+  }
+}

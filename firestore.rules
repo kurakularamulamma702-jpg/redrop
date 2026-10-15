@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidBloodGroup(bg) {
+      return bg in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+    }
+
+    function isValidDonor(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             isValidBloodGroup(data.bloodGroup) &&
+             data.phone is string && data.phone.size() >= 7 && data.phone.size() <= 30 &&
+             data.latitude is number && data.longitude is number;
+    }
+
+    function isValidEmergencyRequest(data) {
+      return data.patientName is string && data.patientName.size() > 0 && data.patientName.size() <= 100 &&
+             isValidBloodGroup(data.bloodGroup) &&
+             data.unitsNeeded is number && data.unitsNeeded >= 1 &&
+             data.hospitalName is string && data.hospitalName.size() > 0 && data.hospitalName.size() <= 150 &&
+             data.contactPhone is string && data.contactPhone.size() >= 7 && data.contactPhone.size() <= 30;
+    }
+
+    // Donors collection: open read for patients needing emergency transfusions
+    match /donors/{donorId} {
+      allow read: if true;
+      allow create: if isValidId(donorId) && isValidDonor(request.resource.data);
+      allow update: if isValidId(donorId) && isValidDonor(request.resource.data);
+      allow delete: if isValidId(donorId);
+    }
+
+    // Emergency Requests collection: open read for donors to see critical alerts
+    match /emergencyRequests/{requestId} {
+      allow read: if true;
+      allow create: if isValidId(requestId) && isValidEmergencyRequest(request.resource.data);
+      allow update: if isValidId(requestId) && isValidEmergencyRequest(request.resource.data);
+      allow delete: if isValidId(requestId);
+    }
+  }
+}
